@@ -61,18 +61,18 @@ def split_documents(docs: List[Document], chunk_size: int = 800, chunk_overlap: 
 # -----------------------------
 # Stage 3 + 4: Embeddings + Vector DB
 # -----------------------------
-def build_vectorstore(chunks: List[Document], persist_directory: str = DB_DIR):
-    if Path(persist_directory).exists():
-        shutil.rmtree(persist_directory)
+def build_vectorstore(chunks: List[Document]):
+    import uuid
+
+    collection_name = f"career_coach_rag_{uuid.uuid4().hex}"
 
     vectorstore = Chroma.from_documents(
         documents=chunks,
         embedding=get_embeddings(),
-        persist_directory=persist_directory,
-        collection_name="career_coach_rag",
+        collection_name=collection_name,
     )
-    return vectorstore
 
+    return vectorstore
 
 # -----------------------------
 # Stage 5: Retrieve Context
